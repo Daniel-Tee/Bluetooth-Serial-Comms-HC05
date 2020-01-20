@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Bluetooth Serial Receive 1</string>
+    <string name="button_open_connection">Open HC-05 Connection</string>
+    <string name="textView_header">Receiving</string>
+    <string name="textView_waiting">Waiting for connection...</string>
+</resources>
