@@ -3,4 +3,7 @@
     <string name="button_open_connection">Open HC-05 Connection</string>
     <string name="textView_header">Receiving</string>
     <string name="textView_waiting">Waiting for connection...</string>
+    <string name="status_rcv">Status:</string>
+    <string name="rpm_rcv">"RPM: "</string>
+    <string name="speed_rcv">Speed:</string>
 </resources>

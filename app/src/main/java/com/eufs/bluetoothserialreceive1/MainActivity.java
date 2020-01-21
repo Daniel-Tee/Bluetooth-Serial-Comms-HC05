@@ -1,11 +1,11 @@
 package com.eufs.bluetoothserialreceive1;
 
+import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "startBTService: Connection opened successfully. Starting RCV process.");
+        tv_receiving.setText(getString(R.string.textView_header));
 
         final Handler handler = new Handler();
         final byte delimiter = 10; //This is the ASCII code for a newline character
@@ -160,10 +161,11 @@ public class MainActivity extends AppCompatActivity {
                                     {
                                         public void run()
                                         {
+                                            Log.d(TAG, "run: Received data: " + dataString);
                                             String[] dataSplit = dataString.split(",");
-                                            tv_speed.setText(dataSplit[0]);
-                                            tv_rpm.setText(dataSplit[1]);
-                                            tv_status.setText(dataSplit[2]);
+                                            tv_speed.setText(getString(R.string.speed_rcv) + " " + dataSplit[0]);
+                                            tv_rpm.setText(getString(R.string.rpm_rcv) + " " + dataSplit[1]);
+                                            tv_status.setText(getString(R.string.status_rcv) + " "+ dataSplit[2]);
                                         }
                                     });
                                 }
