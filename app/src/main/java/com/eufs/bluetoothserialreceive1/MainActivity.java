@@ -163,9 +163,12 @@ public class MainActivity extends AppCompatActivity {
                                         {
                                             Log.d(TAG, "run: Received data: " + dataString);
                                             String[] dataSplit = dataString.split(",");
-                                            tv_speed.setText(getString(R.string.speed_rcv) + " " + dataSplit[0]);
-                                            tv_rpm.setText(getString(R.string.rpm_rcv) + " " + dataSplit[1]);
-                                            tv_status.setText(getString(R.string.status_rcv) + " "+ dataSplit[2]);
+                                            // TODO: Test the strings!
+                                            if(dataSplit.length >= 3) {
+                                                tv_speed.setText(String.format(getString(R.string.speed_rcv), dataSplit[0]));
+                                                tv_rpm.setText(String.format(getString(R.string.rpm_rcv), dataSplit[1]));
+                                                tv_status.setText(String.format(getString(R.string.status_rcv), dataSplit[2]));
+                                            }
                                         }
                                     });
                                 }
