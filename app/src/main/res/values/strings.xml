@@ -6,4 +6,7 @@
     <string name="status_rcv">Status: %1$s</string>
     <string name="rpm_rcv">RPM: %1$s</string>
     <string name="speed_rcv">Speed: %1$s</string>
+    <string name="tps_rcv">TPS: %1$s</string>
+    <string name="gear_rcv">Gear: %1$s</string>
+    <string name="gear_n_rcv">0</string>
 </resources>

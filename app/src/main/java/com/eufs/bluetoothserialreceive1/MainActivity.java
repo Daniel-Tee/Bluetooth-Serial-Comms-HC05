@@ -1,17 +1,20 @@
 package com.eufs.bluetoothserialreceive1;
 
-import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -41,19 +44,35 @@ public class MainActivity extends AppCompatActivity {
     Button btn_start_connection;
     TextView tv_receiving;
     TextView tv_speed;
+    TextView tv_tps;
     TextView tv_rpm;
     TextView tv_status;
+    TextView tv_gear;
+
+    ProgressBar pb_tps;
+    ProgressBar pb_rpm;
+
+    int pb_tps_val;
+    int pb_rpm_val;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         btn_start_connection = findViewById(R.id.btn_open_connection);
         tv_receiving = findViewById(R.id.tv_receiving);
         tv_speed = findViewById(R.id.tv_speed);
+        //tv_tps = findViewById(R.id.tv_tps);
         tv_rpm = findViewById(R.id.tv_rpm);
         tv_status = findViewById(R.id.tv_status);
+        tv_gear = findViewById(R.id.tv_gear);
+        pb_tps = findViewById(R.id.pb_tps);
+        pb_rpm = findViewById(R.id.pb_rpm);
+
+        pb_tps.setProgressTintList(ColorStateList.valueOf(Color.BLUE));
 
         Log.d(TAG, "onCreate: Starting service.");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -65,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void screenTapped(View view) {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     private void startBTService() {
@@ -164,10 +187,25 @@ public class MainActivity extends AppCompatActivity {
                                             Log.d(TAG, "run: Received data: " + dataString);
                                             String[] dataSplit = dataString.split(",");
                                             // TODO: Test the strings!
-                                            if(dataSplit.length >= 3) {
-                                                tv_speed.setText(String.format(getString(R.string.speed_rcv), dataSplit[0]));
-                                                tv_rpm.setText(String.format(getString(R.string.rpm_rcv), dataSplit[1]));
-                                                tv_status.setText(String.format(getString(R.string.status_rcv), dataSplit[2]));
+                                            if(dataSplit.length >= 5) {
+                                                tv_speed.setText(dataSplit[0]);
+                                                //tv_tps.setText(String.format(getString(R.string.tps_rcv), dataSplit[1]));
+                                                tv_rpm.setText(dataSplit[2]);
+                                                tv_status.setText(String.format(getString(R.string.status_rcv), dataSplit[3]));
+                                                tv_gear.setText(dataSplit[4]);
+
+                                                pb_rpm_val = Integer.parseInt(dataSplit[2]) / 130;
+                                                pb_rpm.setProgress(Integer.parseInt(dataSplit[2]) / 130);
+                                                if (pb_rpm_val >= 70) {
+                                                    pb_rpm.setProgressTintList(ColorStateList.valueOf(Color.YELLOW));
+                                                } else if (pb_rpm_val >= 90) {
+                                                    pb_rpm.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                                                } else {
+                                                    pb_rpm.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                                                }
+
+                                                pb_tps_val = Integer.parseInt(dataSplit[1]);
+                                                pb_tps.setProgress(pb_tps_val);
                                             }
                                         }
                                     });
